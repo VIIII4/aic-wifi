@@ -1,0 +1,12 @@
+# 运行时产物（正常不会出现在本目录，防御性忽略）
+*.log
+*.pid
+wpa.conf
+scan_list
+scan_results
+lease
+resolv.conf
+
+# 编辑器/系统
+*.swp
+.DS_Store

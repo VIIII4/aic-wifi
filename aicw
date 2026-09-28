@@ -1,0 +1,83 @@
+#!/data/data/com.termux/files/usr/bin/bash
+# aicw — AIC8800 USB 网卡管理器（Termux 本地；装到 $PREFIX/bin/aicw）
+# 脚本实体在 $HOME/aic-wifi/，可用 AICW_DIR 覆盖。
+D="${AICW_DIR:-${HOME:-/data/data/com.termux/files/home}/aic-wifi}"
+[ -d "$D" ] || D=/data/data/com.termux/files/home/aic-wifi
+
+if [ ! -d "$D" ]; then
+    echo "aicw: 找不到脚本目录 $D" >&2; exit 1
+fi
+
+sub="${1:-help}"; shift 2>/dev/null || true
+
+case "$sub" in
+    # ---- 生命周期 ----
+    up)         exec "$D/wifi-up.sh" ;;
+    down)       exec "$D/wifi-down.sh" ;;
+    off)        exec "$D/wifi-off.sh" ;;
+    restart)    "$D/wifi-down.sh"; echo; exec "$D/wifi-up.sh" ;;
+
+    # ---- 扫描 / 列表 ----
+    scan|rescan) exec "$D/wifi-scan.sh" ;;
+    list)       exec "$D/wifi-list.sh" ;;
+
+    # ---- 连接 ----
+    connect|conn) exec "$D/wifi-connect.sh" "$@" ;;
+    disconnect|disc) exec "$D/wifi-disconnect.sh" ;;
+    reconnect)  exec "$D/wifi-reconnect.sh" ;;
+
+    # ---- 状态 ----
+    status|st)  exec "$D/wifi-status.sh" ;;
+    signal)     exec "$D/wifi-signal.sh" ;;
+    info|ipinfo) exec "$D/wifi-info.sh" ;;
+
+    # ---- 已保存网络 ----
+    saved|networks) exec "$D/wifi-saved.sh" "$@" ;;
+    forget)     exec "$D/wifi-saved.sh" forget "$@" ;;
+    autoconnect) exec "$D/wifi-saved.sh" autoconnect "$@" ;;
+
+    # ---- 上网 / 上行 ----
+    ip)         exec "$D/wifi-ip.sh" ;;
+    aic|use-aic) exec "$D/wifi-use.sh" aic ;;
+    mtk|use-mtk) exec "$D/wifi-use.sh" mtk ;;
+
+    sh|shell)   exec /data/data/com.termux/files/usr/bin/bash -l ;;
+
+    help|-h|--help|"")
+        cat <<EOF
+aicw — AIC8800 USB 网卡管理器 (Termux)
+
+ 生命周期
+   aicw up                         加载驱动 + 起接口 + supplicant
+   aicw off                        断网但保留驱动(撤 IP/路由)
+   aicw down                       停 supplicant + 卸载驱动
+   aicw restart                    重载(已存网络自动重连)
+ 扫描
+   aicw scan                       扫描并列网(按信号排序)
+   aicw list                       看上次扫描结果
+ 连接
+   aicw connect <SSID|#序号> [密码] [--hidden]
+   aicw disconnect                 断开
+   aicw reconnect                  重连
+ 状态
+   aicw status                     关联/链路/地址
+   aicw signal                     信号/速率
+   aicw info                       地址/网关/DNS/默认上行
+ 已保存网络
+   aicw saved                      列出已保存网络
+   aicw saved add <SSID> [密码] [--hidden]
+   aicw forget <SSID|id>           删除
+   aicw autoconnect <SSID|id> on|off
+ 上网
+   aicw ip                         DHCP 取 IP + 配路由(能上网)
+   aicw aic                        默认上行切到 AIC 网卡
+   aicw mtk                        默认上行切回内置 WiFi/移动数据
+ 其它
+   aicw sh                         进入交互 shell
+   aicw help
+
+脚本目录: $D
+EOF
+        ;;
+    *) echo "aicw: 未知子命令 '$sub' (aicw help)" >&2; exit 2 ;;
+esac
