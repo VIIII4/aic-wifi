@@ -18,7 +18,7 @@ PIDF=$MODDIR/wpa.pid
 LOG=$MODDIR/wpa.log
 LOADFW_KO=$MODDIR/aic_load_fw_stub.ko
 FDRV_KO=$MODDIR/aic8800_fdrv_fixed.ko
-FDRV_MD5=0ab38508b24e2a3b03f36ab7f96ab1b5
+FDRV_MD5=4518fb9592a773215afe3191857809af
 SCAN_LIST=$MODDIR/scan_list          # 序号<TAB>SSID
 SCAN_RAW=$MODDIR/scan_results
 

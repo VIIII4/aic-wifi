@@ -122,6 +122,19 @@ curl -sS -o /dev/null -w '%{http_code}\n' https://www.baidu.com
 ---
 
 ## 六、重装 / 恢复
+
+### 预编译模块（GitHub Release，免编译）
+从 [Releases](../../releases) 下载 `aic8800d80-prebuilt-tb335fc-v1.0.tar.gz`，解到模块目录即可：
+```sh
+sudo mkdir -p /data/local/tmp/aic
+sudo tar -xzf aic8800d80-prebuilt-tb335fc-v1.0.tar.gz -C /data/local/tmp/aic
+```
+- 适用内核（vermagic）：`5.15.170-00003-g9a0b9d56c900` —— Lenovo TB335FC（Android 15）实测；其它设备先用 `uname -r` 核对。
+- 包内含 `md5sums.txt`；脚本（`env.sh`）会对 `aic8800_fdrv_fixed.ko` 做 md5 校验，不符会警告。
+- 模块已剥离调试信息（体积更小），功能不变。
+- `fw/` 为厂商固件，版权归原作者所有，仅为互操作目的分发。
+
+### 其它途径
 - Termux 数据被清或脚本丢了：宿主上重新 `./install.sh`。
 - 模块被硬复位损坏（`insmod: Exec format error`）：
   `./install.sh --modules <含 aic_load_fw_stub.ko / aic8800_fdrv_fixed.ko / fw 的目录>`。

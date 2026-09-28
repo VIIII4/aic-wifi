@@ -162,9 +162,11 @@ Android 带 fwmark 的 App 流量不受影响。
   `wifi-connect.sh` `wifi-disconnect.sh` `wifi-reconnect.sh` `wifi-status.sh` `wifi-signal.sh`
   `wifi-info.sh` `wifi-saved.sh` `wifi-ip.sh` `wifi-use.sh` `dhcp.py` `aicw` `README.md`
 - `/data/local/tmp/aic/`：
-  - `aic_load_fw_stub.ko`（3093176 B, md5 `4711fbc214ad721436e07bfc6f596096`）
-  - `aic8800_fdrv_fixed.ko`（22013064 B, md5 `0ab38508b24e2a3b03f36ab7f96ab1b5`）
+  - `aic_load_fw_stub.ko`（176056 B, md5 `8988e0bdf29f85ab023166b3c41dc38c`）
+  - `aic8800_fdrv_fixed.ko`（1460360 B, md5 `4518fb9592a773215afe3191857809af`）
   - `fw/`（18 个固件文件）
+  > 发布的预编译版已剥离 DWARF 调试段（体积 22MB→1.4MB，功能不变，实测加载/联网正常）；
+  > 构建原始产出的 md5 分别为 `4711fbc2…`/`0ab38508…`，与上文排错过程中引用的一致。
 
 ### 宿主端（PC）
 - 套件源码：`~/aic-wifi-adb/`（`awifi` `ax` `install.sh` 及各脚本 + README）
