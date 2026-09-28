@@ -7,9 +7,20 @@ require_root "$@"
 
 if wpa_running; then
     wpa disconnect
+    # 状态脱节兜底: 若 supplicant 认为没连接，上面的 disconnect 是空操作、不会发 deauth，
+    # 驱动层可能仍关联。检测到仍 Connected 则: 停属主 -> 内核补 deauth -> 重启 supplicant。
+    if [ -e "/sys/class/net/$IFACE" ] && "$IW" dev "$IFACE" link 2>/dev/null | grep -q '^Connected'; then
+        echo "[!] supplicant 状态与驱动脱节，强制 deauth 并重启 supplicant"
+        "$WPA_CLI" $WPA_OPTS terminate 2>/dev/null || true
+        pkill -f "$WPA_SUPPLICANT" 2>/dev/null || true
+        sleep 1
+        "$IW" dev "$IFACE" disconnect 2>/dev/null || true
+        "$WPA_SUPPLICANT" -Dnl80211 -i "$IFACE" -c "$CONF" -P "$PIDF" -B 2>/dev/null
+    fi
     echo "[+] 已断开当前连接"
 else
     echo "[*] supplicant 未运行（驱动可能也没加载）"
+    [ -e "/sys/class/net/$IFACE" ] && "$IW" dev "$IFACE" disconnect 2>/dev/null || true
 fi
 
 ip rule del priority 30000 2>/dev/null || true
