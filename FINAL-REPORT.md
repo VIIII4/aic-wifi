@@ -156,12 +156,12 @@ Android 带 fwmark 的 App 流量不受影响。
 ## 5. 产物清单与位置
 
 ### 设备端 · Termux（日常操作）
-- `$PREFIX/bin/aicw`：主命令
+- `~/.local/bin/aicw`：主命令（PATH 内；`$PREFIX/bin/aicw` 为符号链接）
 - `$PREFIX/bin/ax`：环境归一化助手（给宿主 adb 用）
-- `~/aic-wifi/`：`env.sh` `wifi-up.sh` `wifi-off.sh` `wifi-down.sh` `wifi-scan.sh` `wifi-list.sh`
+- `~/.local/bin/`：`env.sh` `wifi-up.sh` `wifi-off.sh` `wifi-down.sh` `wifi-scan.sh` `wifi-list.sh`
   `wifi-connect.sh` `wifi-disconnect.sh` `wifi-reconnect.sh` `wifi-status.sh` `wifi-signal.sh`
-  `wifi-info.sh` `wifi-saved.sh` `wifi-ip.sh` `wifi-use.sh` `dhcp.py` `aicw` `README.md`
-- `/data/local/tmp/aic/`：
+  `wifi-info.sh` `wifi-saved.sh` `wifi-ip.sh` `wifi-use.sh` `dhcp.py`（源码仓库：`~/aic-wifi/`）
+- `/data/adb/kmod/aic/`：
   - `aic_load_fw_stub.ko`（176056 B, md5 `8988e0bdf29f85ab023166b3c41dc38c`）
   - `aic8800_fdrv_fixed.ko`（1460360 B, md5 `4518fb9592a773215afe3191857809af`）
   - `fw/`（18 个固件文件）
@@ -265,7 +265,7 @@ aicw info        # 看到 "当前走: AIC (aic0)"
 ## 10. 关键事实速查
 - 接口名：**`aic0`**（源码 `rwnx_main.c` 初始名 `aic%d`）。
 - 模块顺序：先 `aic_load_fw_stub.ko`，后 `aic8800_fdrv_fixed.ko`。
-- 固件目录：`/data/local/tmp/aic/fw`，并写 `firmware_class/parameters/path`。
+- 固件目录：`/data/adb/kmod/aic/fw`，并写 `firmware_class/parameters/path`。
 - 上网：`aicw ip`（`onlink` + `ip rule priority 30000 lookup main`）。
 - 切换：`aicw aic` / `aicw mtk`。
 - 真因一句话：**cfg80211_ops 少 `CONFIG_NL80211_TESTMODE` 两字段（错位 0x10）+ 接口名不能叫 `wlan*`（MTK 抢认）**。

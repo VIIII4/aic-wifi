@@ -59,6 +59,8 @@ mkdir -p "$CTRL"; chmod 777 "$CTRL"
 if ! wpa_running; then
     echo "[*] 启动 wpa_supplicant"
     [ -s "$CONF" ] || { echo "    (无 $CONF，先创建一个空配置)"; printf 'ctrl_interface=%s\nupdate_config=1\n' "$CTRL" > "$CONF"; }
+    # 强制 ctrl_interface 指向当前 MODDIR：迁移目录/换路径后旧配置里的绝对路径会使 supplicant 起不来
+    sed -i "s#^ctrl_interface=.*#ctrl_interface=$CTRL#" "$CONF"
     "$WPA_SUPPLICANT" -Dnl80211 -i "$IFACE" -c "$CONF" -P "$PIDF" -B
     sleep 3
 fi

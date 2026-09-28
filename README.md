@@ -11,13 +11,13 @@
 ### 设备端 · Termux（日常操作处）
 | 路径 | 说明 |
 |---|---|
-| **`aicw`**（`$PREFIX/bin/aicw`） | **主命令入口**，任意目录直接敲 `aicw ...` |
-| `~/aic-wifi/` | 脚本目录：`env.sh`、`wifi-*.sh`、`dhcp.py`、`aicw`、`README.md` |
-| `/data/local/tmp/aic/` | 内核模块 + 固件（DE 存储，锁屏/重启也在） |
-| `/data/local/tmp/aic/aic_load_fw_stub.ko` | 固件下载器（先加载；也是 fdrv 的符号提供者） |
-| `/data/local/tmp/aic/aic8800_fdrv_fixed.ko` | 网卡驱动（已修复版） |
-| `/data/local/tmp/aic/fw/` | 18 个固件文件 |
-| `/data/local/tmp/aic/{wpa_ctrl,wpa.conf,scan_list,lease,resolv.conf}` | 运行时文件（脚本内部用） |
+| **`aicw`**（`~/.local/bin/aicw`，已在 PATH；`$PREFIX/bin/aicw` 为符号链接） | **主命令入口**，任意目录直接敲 `aicw ...` |
+| `~/.local/bin/` | 脚本目录：`env.sh`、`wifi-*.sh`、`dhcp.py`、`aicw` |
+| `/data/adb/kmod/aic/` | 内核模块 + 固件（root 持久化目录，与 KernelSU/Magisk 同级，重启不丢） |
+| `/data/adb/kmod/aic/aic_load_fw_stub.ko` | 固件下载器（先加载；也是 fdrv 的符号提供者） |
+| `/data/adb/kmod/aic/aic8800_fdrv_fixed.ko` | 网卡驱动（已修复版） |
+| `/data/adb/kmod/aic/fw/` | 18 个固件文件 |
+| `/data/adb/kmod/aic/{wpa_ctrl,wpa.conf,scan_list,lease,resolv.conf}` | 运行时文件（脚本内部用；源码在 [aic-wifi](https://github.com/VIIII4/aic-wifi) 仓库） |
 
 ### 宿主端（PC，可选）
 `~/.../aic-wifi-adb/`（源码，`install.sh` 负责部署）；宿主命令 **`awifi`**（装在 PATH，如 `/usr/bin/awifi`）。
@@ -126,8 +126,8 @@ curl -sS -o /dev/null -w '%{http_code}\n' https://www.baidu.com
 ### 预编译模块（GitHub Release，免编译）
 从 [Releases](../../releases) 下载 `aic8800d80-prebuilt-tb335fc-v1.0.tar.gz`，解到模块目录即可：
 ```sh
-sudo mkdir -p /data/local/tmp/aic
-sudo tar -xzf aic8800d80-prebuilt-tb335fc-v1.0.tar.gz -C /data/local/tmp/aic
+sudo mkdir -p /data/adb/kmod/aic
+sudo tar -xzf aic8800d80-prebuilt-tb335fc-v1.0.tar.gz -C /data/adb/kmod/aic
 ```
 - 适用内核（vermagic）：`5.15.170-00003-g9a0b9d56c900` —— Lenovo TB335FC（Android 15）实测；其它设备先用 `uname -r` 核对。
 - 包内含 `md5sums.txt`；脚本（`env.sh`）会对 `aic8800_fdrv_fixed.ko` 做 md5 校验，不符会警告。

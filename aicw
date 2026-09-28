@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# aicw — AIC8800 USB 网卡管理器（Termux 本地；装到 $PREFIX/bin/aicw）
-# 脚本实体在 $HOME/aic-wifi/，可用 AICW_DIR 覆盖。
-D="${AICW_DIR:-${HOME:-/data/data/com.termux/files/home}/aic-wifi}"
-[ -d "$D" ] || D=/data/data/com.termux/files/home/aic-wifi
+# aicw — AIC8800 USB 网卡管理器（Termux 本地；装到 ~/.local/bin）
+# 脚本实体在 $HOME/.local/bin/，可用 AICW_DIR 覆盖。
+D="${AICW_DIR:-${HOME:-/data/data/com.termux/files/home}/.local/bin}"
+[ -d "$D" ] || D=/data/data/com.termux/files/home/.local/bin
 
 if [ ! -d "$D" ]; then
     echo "aicw: 找不到脚本目录 $D" >&2; exit 1

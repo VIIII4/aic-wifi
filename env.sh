@@ -9,7 +9,7 @@ WPA_SUPPLICANT=$PREFIX/bin/wpa_supplicant
 WPA_CLI=$PREFIX/bin/wpa_cli
 PYTHON=$PREFIX/bin/python3
 
-MODDIR=/data/local/tmp/aic
+MODDIR=/data/adb/kmod/aic
 FW_DIR=$MODDIR/fw
 IFACE=aic0
 CTRL=$MODDIR/wpa_ctrl

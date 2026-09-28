@@ -105,13 +105,13 @@ def main():
         servers = [socket.inet_ntoa(dns[i:i+4]) for i in range(0, len(dns), 4)]
         print('[+] DNS: %s' % ' '.join(servers))
         try:
-            with open('/data/local/tmp/aic/resolv.conf', 'w') as f:
+            with open('/data/adb/kmod/aic/resolv.conf', 'w') as f:
                 f.write(''.join('nameserver %s\n' % d for d in servers))
         except Exception as e:
             print('    (dns write: %s)' % e)
     # 记下租约，供 wifi-use.sh 切换默认上行时复用
     try:
-        with open('/data/local/tmp/aic/lease', 'w') as f:
+        with open('/data/adb/kmod/aic/lease', 'w') as f:
             f.write('ip=%s\n' % ip)
             f.write('gw=%s\n' % (gw or ''))
             f.write('dns=%s\n' % ' '.join(servers))
